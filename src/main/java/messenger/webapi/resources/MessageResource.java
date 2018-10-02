@@ -1,4 +1,4 @@
-package messenger.webapi;
+package messenger.webapi.resources;
 
 import messenger.webapi.model.Message;
 import messenger.webapi.service.MessageService;
