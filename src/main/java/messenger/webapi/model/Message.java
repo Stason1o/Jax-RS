@@ -3,7 +3,7 @@ package messenger.webapi.model;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 
-@XmlRootElement
+//@XmlRootElement
 public class Message {
 
     private Long id;
@@ -51,5 +51,16 @@ public class Message {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Message{");
+        sb.append("id=").append(id);
+        sb.append(", message='").append(message).append('\'');
+        sb.append(", created=").append(created);
+        sb.append(", author='").append(author).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
