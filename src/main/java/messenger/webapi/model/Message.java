@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//@XmlRootElement
+@XmlRootElement
 public class Message {
 
     private Long id;

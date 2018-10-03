@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static messenger.webapi.Util.UriUtils.getUriForComments;
 import static messenger.webapi.Util.UriUtils.getUriForMessage;
 import static messenger.webapi.Util.UriUtils.getUriForProfile;
@@ -27,12 +28,28 @@ import static messenger.webapi.Util.UriUtils.getUriForProfile;
 @Path("messages")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
+//@Produces(value = {APPLICATION_JSON, TEXT_XML})
 public class MessageResource {
 
     private MessageService messageService = new MessageService();
 
     @GET
-    public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {
+    @Produces(APPLICATION_JSON)
+    public List<Message> getJsonMessages(@BeanParam MessageFilterBean filterBean) {
+        System.out.println("Json method call");
+        if (filterBean.getStart() >= 0 && filterBean.getSize() > 0)
+            return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
+
+        if (filterBean.getYear() > 0)
+            return messageService.getAllMessagesForYear(filterBean.getYear());
+
+        return messageService.getAllMessages();
+    }
+
+    @GET
+    @Produces(TEXT_XML)
+    public List<Message> getXmlMessages(@BeanParam MessageFilterBean filterBean) {
+        System.out.println("XML method call");
         if (filterBean.getStart() >= 0 && filterBean.getSize() > 0)
             return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
 

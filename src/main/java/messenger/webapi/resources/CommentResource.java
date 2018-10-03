@@ -15,10 +15,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
 
 @Path("/")
 @Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
+@Produces(value = {APPLICATION_JSON, TEXT_XML})
 public class CommentResource {
 
     private CommentService commentService = new CommentService();

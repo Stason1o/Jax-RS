@@ -3,7 +3,7 @@ package messenger.webapi.model;
 import java.time.LocalDateTime;
 import javax.xml.bind.annotation.XmlRootElement;
 
-//@XmlRootElement
+@XmlRootElement
 public class Profile {
 
     private Long id;

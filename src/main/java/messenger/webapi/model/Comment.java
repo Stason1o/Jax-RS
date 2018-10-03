@@ -1,7 +1,9 @@
 package messenger.webapi.model;
 
 import java.time.LocalDateTime;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Comment {
 
     private Long id;
