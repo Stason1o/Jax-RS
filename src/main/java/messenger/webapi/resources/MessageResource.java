@@ -5,7 +5,6 @@ import messenger.webapi.resources.beans.MessageFilterBean;
 import messenger.webapi.service.MessageService;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -16,12 +15,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static messenger.webapi.Util.UriUtils.getUriForComments;
+import static messenger.webapi.Util.UriUtils.getUriForMessage;
+import static messenger.webapi.Util.UriUtils.getUriForProfile;
 
 @Path("messages")
 @Consumes(APPLICATION_JSON)
@@ -66,8 +67,13 @@ public class MessageResource {
 
     @GET
     @Path(value = "/{messageId}")
-    public Message getMessage(@PathParam("messageId") Long messageId) {
-        return messageService.getMessage(messageId);
+    public Message getMessage(@PathParam("messageId") Long messageId, @Context UriInfo uriInfo) {
+        Message message = messageService.getMessage(messageId);
+
+        message.addLink(getUriForMessage(uriInfo, message), "self");
+        message.addLink(getUriForProfile(uriInfo, message), "profile");
+        message.addLink(getUriForComments(uriInfo, message), "comments");
+        return message;
     }
 
     @Path(value = "/{messageId}/comments")
