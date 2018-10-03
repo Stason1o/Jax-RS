@@ -1,9 +1,11 @@
 package messenger.webapi.resources;
 
 import messenger.webapi.model.Message;
+import messenger.webapi.resources.beans.MessageFilterBean;
 import messenger.webapi.service.MessageService;
 
 import java.util.List;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -23,7 +26,13 @@ public class MessageResource {
     private MessageService messageService = new MessageService();
 
     @GET
-    public List<Message> getMessages() {
+    public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {
+        if (filterBean.getStart() >= 0 && filterBean.getSize() > 0)
+            return messageService.getAllMessagesPaginated(filterBean.getStart(), filterBean.getSize());
+
+        if (filterBean.getYear() > 0)
+            return messageService.getAllMessagesForYear(filterBean.getYear());
+
         return messageService.getAllMessages();
     }
 
@@ -50,5 +59,10 @@ public class MessageResource {
     @Path(value = "/{messageId}")
     public Message getMessage(@PathParam("messageId") Long messageId) {
         return messageService.getMessage(messageId);
+    }
+
+    @Path(value = "/{messageId}/comments")
+    public CommentResource getCommentResource() {
+        return new CommentResource();
     }
 }
